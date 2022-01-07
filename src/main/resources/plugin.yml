@@ -1,0 +1,9 @@
+name: CheezSurvTagGame
+version: '${project.version}'
+main: io.github.seriousguy888.cheezsurvtaggame.CheezSurvTagGame
+api-version: 1.18
+authors: [ SeriousGuy888 ]
+description: just a plugin to play tag on an smp
+commands:
+  it:
+    description: See who is currently it in the game of tag, or set who is it if you have perms.
