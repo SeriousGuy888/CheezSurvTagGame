@@ -76,6 +76,9 @@ public class Game {
   }
 
 
+  public void loadTagStats() { // if no argument is supplied, load the stats for all players currently online
+    Bukkit.getOnlinePlayers().forEach(this::loadTagStats);
+  }
   public void loadTagStats(OfflinePlayer player) {
     String uuid = player.getUniqueId().toString();
 

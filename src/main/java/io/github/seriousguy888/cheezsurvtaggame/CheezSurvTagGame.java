@@ -11,7 +11,8 @@ public final class CheezSurvTagGame extends JavaPlugin {
 
   @Override
   public void onEnable() {
-    this.game = new Game(this);
+    game = new Game(this);
+    game.loadTagStats();
 
     this.getServer().getPluginManager().registerEvents(new TagEvents(this), this);
     Objects.requireNonNull(this.getCommand("it")).setExecutor(new ItCommand(this));
