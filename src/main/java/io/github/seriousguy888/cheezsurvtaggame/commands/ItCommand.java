@@ -1,5 +1,6 @@
-package io.github.seriousguy888.cheezsurvtaggame;
+package io.github.seriousguy888.cheezsurvtaggame.commands;
 
+import io.github.seriousguy888.cheezsurvtaggame.CheezSurvTagGame;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;

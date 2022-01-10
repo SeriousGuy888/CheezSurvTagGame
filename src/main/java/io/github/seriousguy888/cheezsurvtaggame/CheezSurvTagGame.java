@@ -1,5 +1,6 @@
 package io.github.seriousguy888.cheezsurvtaggame;
 
+import io.github.seriousguy888.cheezsurvtaggame.commands.ItCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
