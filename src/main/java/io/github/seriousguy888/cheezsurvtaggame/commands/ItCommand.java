@@ -11,19 +11,11 @@ import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
 
-public class ItCommand extends Command implements CommandExecutor { //  implements TabExecutor
+public class ItCommand implements CommandExecutor { //  implements TabExecutor
   private final CheezSurvTagGame plugin;
 
   public ItCommand(CheezSurvTagGame plugin) {
-    super("taggame");
     this.plugin = plugin;
-  }
-
-  @Override
-  public boolean execute(@Nonnull CommandSender sender,
-                         @Nonnull String commandLabel,
-                         @Nonnull String[] args) {
-    return false;
   }
 
   @Override
