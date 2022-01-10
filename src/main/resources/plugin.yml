@@ -6,4 +6,6 @@ authors: [ SeriousGuy888 ]
 description: just a plugin to play tag on an smp
 commands:
   it:
-    description: See who is currently it in the game of tag, or set who is it if you have perms.
+    description: See who is currently It in the game of tag, or set who is It if you have perms.
+  tagstats:
+    description: See your stats or the stats of other players in the game of tag.

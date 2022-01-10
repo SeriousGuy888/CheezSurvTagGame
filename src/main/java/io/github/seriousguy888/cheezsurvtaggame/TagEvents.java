@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class TagEvents implements Listener {
   private final CheezSurvTagGame plugin;
@@ -44,6 +45,14 @@ public class TagEvents implements Listener {
     plugin.game.setPreviousIt(damager);
     plugin.game.setLastTagTimestampToNow();
 
+    TagStatsProfile damagerStats = plugin.game.getTagStats(damager);
+    damagerStats.incrementTagsGiven();
+    plugin.game.setTagStats(damager, damagerStats);
+
+    TagStatsProfile victimStats = plugin.game.getTagStats(victim);
+    victimStats.incrementTagsTaken();
+    plugin.game.setTagStats(victim, victimStats);
+
     Bukkit.broadcastMessage(ChatColor.GRAY + damager.getName() + " tagged " + victim.getName());
     victim.spigot().sendMessage(
         ChatMessageType.ACTION_BAR,
@@ -52,7 +61,15 @@ public class TagEvents implements Listener {
 
   @EventHandler
   public void onJoin(PlayerJoinEvent event) {
+    Player player = event.getPlayer();
+    plugin.game.loadTagStats(player);
+
     OfflinePlayer it = plugin.game.getIt();
-    event.getPlayer().sendMessage(ChatColor.GRAY + it.getName() + " is currently It.");
+    player.sendMessage(ChatColor.GRAY + it.getName() + " is currently It.");
+  }
+
+  @EventHandler
+  public void onQuit(PlayerQuitEvent event) {
+    plugin.game.saveTagStats(event.getPlayer());
   }
 }

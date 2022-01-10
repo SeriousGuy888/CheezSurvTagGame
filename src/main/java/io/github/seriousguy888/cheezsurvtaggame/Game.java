@@ -9,23 +9,24 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class Game {
-  private CheezSurvTagGame plugin;
-
   private final File file;
   private final FileConfiguration gameDataStorage;
 
-  private OfflinePlayer it; // the player who is currently it
+  private HashMap<OfflinePlayer, TagStatsProfile> playerTagStats;
 
+  private OfflinePlayer it; // the player who is currently it
   private OfflinePlayer previousIt; // who to apply the tagback cooldown on
   private long lastTagTimestamp; // used for calculating the tagback cooldown
 
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
   public Game(CheezSurvTagGame plugin) {
-    this.plugin = plugin;
+//    this.plugin = plugin;
+    this.playerTagStats = new HashMap<>();
 
     file = new File(plugin.getDataFolder() + File.separator + "data.yml");
     plugin.getLogger().info(file.getAbsolutePath());
@@ -53,7 +54,7 @@ public class Game {
         .orElse(null);
   }
 
-  public void loadState() {
+  private void loadState() {
     String itUuidString = gameDataStorage.getString("it");
     if(itUuidString == null) {
       setIt(pickRandomIt());
@@ -72,6 +73,45 @@ public class Game {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+
+  public void loadTagStats(OfflinePlayer player) {
+    String uuid = player.getUniqueId().toString();
+
+    int tagsTaken = gameDataStorage.getInt("players." + uuid + ".stats.taken");
+    int tagsGiven = gameDataStorage.getInt("players." + uuid + ".stats.given");
+    playerTagStats.put(player, new TagStatsProfile(tagsTaken, tagsGiven));
+  }
+
+  public void saveTagStats() {
+    // if no args are supplied, just write all the profiles loaded to the data.yml file
+    playerTagStats.forEach((player, _tagStatsProfile) -> saveTagStats(player));
+  }
+  public void saveTagStats(OfflinePlayer player) {
+    if(!playerTagStats.containsKey(player))
+      return;
+
+    String uuid = player.getUniqueId().toString();
+    TagStatsProfile statsProfile = getTagStats(player);
+    gameDataStorage.set("players." + uuid + ".stats.taken", statsProfile.getTagsTaken());
+    gameDataStorage.set("players." + uuid + ".stats.given", statsProfile.getTagsGiven());
+
+    try {
+      gameDataStorage.save(file);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public TagStatsProfile getTagStats(OfflinePlayer player) {
+    if(!playerTagStats.containsKey(player))
+      loadTagStats(player);
+    return playerTagStats.get(player);
+  }
+
+  public void setTagStats(OfflinePlayer player, TagStatsProfile newProfile) {
+    playerTagStats.put(player, newProfile);
   }
 
 
