@@ -102,7 +102,7 @@ public class Game {
 
     try {
       gameDataStorage.save(file);
-    } catch (IOException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
