@@ -47,17 +47,21 @@ public class Game {
     Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
 
     // pick a random player from those online, or null if none are found
-    return onlinePlayers
+    Player newIt = onlinePlayers
         .stream()
         .skip((int) (onlinePlayers.size() * Math.random()))
         .findFirst()
         .orElse(null);
+
+    if(newIt != null)
+      setIt(newIt);
+    return newIt;
   }
 
   private void loadState() {
     String itUuidString = gameDataStorage.getString("it");
     if(itUuidString == null) {
-      setIt(pickRandomIt());
+      pickRandomIt();
       return;
     }
 

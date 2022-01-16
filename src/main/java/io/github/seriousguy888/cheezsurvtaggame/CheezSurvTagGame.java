@@ -2,6 +2,7 @@ package io.github.seriousguy888.cheezsurvtaggame;
 
 import io.github.seriousguy888.cheezsurvtaggame.commands.ItCommand;
 import io.github.seriousguy888.cheezsurvtaggame.commands.StatsCommand;
+import io.github.seriousguy888.cheezsurvtaggame.runnables.ChooseRandomIt;
 import io.github.seriousguy888.cheezsurvtaggame.runnables.SaveGameData;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,6 +22,7 @@ public final class CheezSurvTagGame extends JavaPlugin {
 
     // save the tag game data to data.yml every 15 minutes
     new SaveGameData(this).runTaskTimer(this, 0, 15 * 60 * 20);
+    new ChooseRandomIt(this).runTaskTimer(this, 0, 5 * 60 * 20);
   }
 
   @Override
