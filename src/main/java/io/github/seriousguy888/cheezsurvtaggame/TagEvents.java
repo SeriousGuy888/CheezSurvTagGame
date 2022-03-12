@@ -25,8 +25,12 @@ public class TagEvents implements Listener {
     if(!(event.getDamager() instanceof Player damager))
       return;
 
+    OfflinePlayer it = plugin.game.getIt();
+    if(it == null)
+      return;
+
     // check equality of uuids because the damager is a Player and the player who is it is an OfflinePlayer
-    if(!damager.getUniqueId().equals(plugin.game.getIt().getUniqueId()))
+    if(!damager.getUniqueId().equals(it.getUniqueId()))
       return;
     if(!Bukkit.getOnlinePlayers().contains(victim))
       return; // crude test to try to prevent tagging npcs
