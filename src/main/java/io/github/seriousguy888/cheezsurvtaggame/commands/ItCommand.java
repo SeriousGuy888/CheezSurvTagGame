@@ -25,7 +25,10 @@ public class ItCommand implements CommandExecutor { //  implements TabExecutor
                            @Nonnull String[] args) {
     if(args.length == 0) {
       OfflinePlayer it = plugin.game.getIt();
-      sender.sendMessage(ChatColor.GRAY + it.getName() + " is currently It.");
+      if(it == null)
+        sender.sendMessage(ChatColor.GRAY + "Nobody is It right now.");
+      else
+        sender.sendMessage(ChatColor.GRAY + it.getName() + " is currently It.");
       return true;
     }
 
