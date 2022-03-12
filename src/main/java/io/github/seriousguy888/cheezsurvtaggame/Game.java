@@ -70,7 +70,12 @@ public class Game {
   }
 
   public void saveState() {
-    gameDataStorage.set("it", getIt().getUniqueId().toString());
+    OfflinePlayer it = getIt();
+    if(it == null) {
+      Bukkit.getLogger().warning("Current It was not saved as no player is It.");
+      return;
+    }
+    gameDataStorage.set("it", it.getUniqueId().toString());
 
     try {
       gameDataStorage.save(file);

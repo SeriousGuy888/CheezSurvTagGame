@@ -16,7 +16,7 @@ public class ChooseRandomIt extends BukkitRunnable {
   @Override
   public void run() {
     OfflinePlayer currentIt = plugin.game.getIt();
-    if(currentIt.isOnline())
+    if(currentIt != null && currentIt.isOnline())
       return;
 
     Player newIt = plugin.game.pickRandomIt();

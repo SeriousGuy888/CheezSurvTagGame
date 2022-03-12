@@ -65,7 +65,8 @@ public class TagEvents implements Listener {
     plugin.game.loadTagStats(player);
 
     OfflinePlayer it = plugin.game.getIt();
-    player.sendMessage(ChatColor.GRAY + it.getName() + " is currently It.");
+    if(it != null)
+      player.sendMessage(ChatColor.GRAY + it.getName() + " is currently It.");
   }
 
   @EventHandler
