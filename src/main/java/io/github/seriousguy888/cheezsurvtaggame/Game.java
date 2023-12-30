@@ -29,7 +29,6 @@ public class Game {
     this.playerTagStats = new HashMap<>();
 
     file = new File(plugin.getDataFolder() + File.separator + "data.yml");
-    plugin.getLogger().info(file.getAbsolutePath());
     if(!file.exists()) {
       try {
         file.getParentFile().mkdirs();
