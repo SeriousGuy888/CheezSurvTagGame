@@ -1,7 +1,7 @@
 name: CheezSurvTagGame
 version: '${project.version}'
 main: io.github.seriousguy888.cheezsurvtaggame.CheezSurvTagGame
-api-version: 1.18
+api-version: 1.20
 authors: [ SeriousGuy888 ]
 description: just a plugin to play tag on an smp
 commands:
