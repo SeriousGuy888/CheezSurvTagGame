@@ -48,7 +48,7 @@ public class StatsCommand implements CommandExecutor {
 
     TagStatsProfile statsProfile = plugin.getGame().getTagStats(lookupPlayer);
     sender.sendMessage("\n" + ChatColor.BLUE + ChatColor.BOLD +
-        lookupPlayer.getName() + "'s CheezSurv Tag Stats" +
+        lookupPlayer.getName() + "'s Tag Stats" +
         ChatColor.DARK_AQUA + "\nTimes Tagged by Other Players: " + ChatColor.AQUA +
         statsProfile.getTagsGiven() +
         ChatColor.DARK_AQUA + "\nTimes Having Tagged Another Player: " + ChatColor.AQUA +
