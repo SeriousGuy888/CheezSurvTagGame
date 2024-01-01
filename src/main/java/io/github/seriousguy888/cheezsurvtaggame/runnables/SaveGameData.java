@@ -11,7 +11,7 @@ public class SaveGameData extends BukkitRunnable {
 
   @Override
   public void run() {
-    plugin.game.saveState();
-    plugin.game.saveTagStats();
+    plugin.getGame().saveState();
+    plugin.getGame().saveTagStats();
   }
 }

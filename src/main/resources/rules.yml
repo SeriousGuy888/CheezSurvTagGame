@@ -1,0 +1,3 @@
+projectiles-can-tag: false
+shields-can-block: false
+tagback-cooldown-ms: 3000

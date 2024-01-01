@@ -15,11 +15,11 @@ public class ChooseRandomIt extends BukkitRunnable {
 
   @Override
   public void run() {
-    OfflinePlayer currentIt = plugin.game.getIt();
+    OfflinePlayer currentIt = plugin.getGame().getIt();
     if(currentIt != null && currentIt.isOnline())
       return;
 
-    Player newIt = plugin.game.pickRandomIt();
+    Player newIt = plugin.getGame().pickRandomIt();
     if(newIt != null) {
       Bukkit.broadcastMessage(ChatColor.GRAY + newIt.getName() +
           " has been randomly chosen to be It as the previous It player is not currently online.");

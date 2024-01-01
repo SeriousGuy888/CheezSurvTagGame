@@ -2,31 +2,44 @@ package io.github.seriousguy888.cheezsurvtaggame;
 
 import io.github.seriousguy888.cheezsurvtaggame.commands.ItCommand;
 import io.github.seriousguy888.cheezsurvtaggame.commands.StatsCommand;
+import io.github.seriousguy888.cheezsurvtaggame.config.RulesetConfig;
 import io.github.seriousguy888.cheezsurvtaggame.runnables.ChooseRandomIt;
 import io.github.seriousguy888.cheezsurvtaggame.runnables.SaveGameData;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
 
 public final class CheezSurvTagGame extends JavaPlugin {
-  public Game game;
+    private Game game;
+    private RulesetConfig rulesetConfig;
 
-  @Override
-  public void onEnable() {
-    game = new Game(this);
-    game.loadTagStats();
+    @Override
+    public void onEnable() {
+        rulesetConfig = new RulesetConfig(this, "rules.yml");
 
-    this.getServer().getPluginManager().registerEvents(new TagEvents(this), this);
-    Objects.requireNonNull(this.getCommand("it")).setExecutor(new ItCommand(this));
-    Objects.requireNonNull(this.getCommand("tagstats")).setExecutor(new StatsCommand(this));
+        game = new Game(this);
+        game.loadTagStats();
 
-    // save the tag game data to data.yml every 15 minutes
-    new SaveGameData(this).runTaskTimer(this, 0, 15 * 60 * 20);
-    new ChooseRandomIt(this).runTaskTimer(this, 0, 5 * 60 * 20);
-  }
+        this.getServer().getPluginManager().registerEvents(new TagEvents(this), this);
+        Objects.requireNonNull(this.getCommand("it")).setExecutor(new ItCommand(this));
+        Objects.requireNonNull(this.getCommand("tagstats")).setExecutor(new StatsCommand(this));
 
-  @Override
-  public void onDisable() {
-    new SaveGameData(this).run();
-  }
+        // save the tag game data to data.yml every 15 minutes
+        new SaveGameData(this).runTaskTimer(this, 0, 15 * 60 * 20);
+        new ChooseRandomIt(this).runTaskTimer(this, 0, 5 * 60 * 20);
+    }
+
+    @Override
+    public void onDisable() {
+        new SaveGameData(this).run();
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public RulesetConfig getRulesetConfig() {
+        return rulesetConfig;
+    }
 }

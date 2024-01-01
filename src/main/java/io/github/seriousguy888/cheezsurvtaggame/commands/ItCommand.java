@@ -24,7 +24,7 @@ public class ItCommand implements CommandExecutor { //  implements TabExecutor
                            @Nonnull String label,
                            @Nonnull String[] args) {
     if(args.length == 0) {
-      OfflinePlayer it = plugin.game.getIt();
+      OfflinePlayer it = plugin.getGame().getIt();
       if(it == null)
         sender.sendMessage(ChatColor.GRAY + "Nobody is It right now.");
       else
@@ -48,7 +48,7 @@ public class ItCommand implements CommandExecutor { //  implements TabExecutor
       return true;
     }
 
-    plugin.game.setIt(player);
+    plugin.getGame().setIt(player);
     Bukkit.broadcastMessage(ChatColor.GRAY +
         player.getName() + " is now It. (Manually set by " + sender.getName() + ")");
     return true;
