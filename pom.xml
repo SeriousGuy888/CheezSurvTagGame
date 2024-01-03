@@ -40,15 +40,7 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-<!--                            <minimizeJar>true</minimizeJar>-->
-<!--                            <filters>-->
-<!--                                <filter>-->
-<!--                                    <artifact>org.h2</artifact>-->
-<!--                                    <includes>-->
-<!--                                        <include>**</include>-->
-<!--                                    </includes>-->
-<!--                                </filter>-->
-<!--                            </filters>-->
+                            <minimizeJar>true</minimizeJar>
                         </configuration>
                     </execution>
                 </executions>
@@ -88,10 +80,17 @@
             <version>1.20.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
+        <!--
+            sqlite-jdbc is included as part of spigot, so i won't shade it in myself
+            https://www.spigotmc.org/wiki/included-libraries-in-spigot/
+            https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/browse/pom.xml
+        -->
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>2.2.224</version>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.42.0.1</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
