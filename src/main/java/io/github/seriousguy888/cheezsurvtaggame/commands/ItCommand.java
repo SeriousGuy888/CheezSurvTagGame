@@ -49,6 +49,8 @@ public class ItCommand implements CommandExecutor { //  implements TabExecutor
     }
 
     plugin.getGame().setIt(player);
+    plugin.getDatabase().logNewIt(player);
+
     Bukkit.broadcastMessage(ChatColor.GRAY +
         player.getName() + " is now It. (Manually set by " + sender.getName() + ")");
     return true;

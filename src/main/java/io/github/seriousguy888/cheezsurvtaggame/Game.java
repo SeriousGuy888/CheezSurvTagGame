@@ -53,8 +53,11 @@ public class Game {
                 .findFirst()
                 .orElse(null);
 
-        if (newIt != null)
+        if (newIt != null) {
             setIt(newIt);
+            plugin.getDatabase().logNewIt(newIt);
+        }
+
         return newIt;
     }
 
@@ -85,7 +88,7 @@ public class Game {
     }
 
 
-    public void passIt(OfflinePlayer oldIt, OfflinePlayer newIt) {
+    public void passItTo(OfflinePlayer newIt, OfflinePlayer oldIt) {
         setIt(newIt);
         setPreviousIt(oldIt);
         setLastTagTimestampToNow();

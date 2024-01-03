@@ -70,7 +70,7 @@ public class TagEvents implements Listener {
             return;
         }
 
-        game.passIt(damager, victim);
+        game.passItTo(victim, damager);
 
         Bukkit.broadcastMessage(ChatColor.GRAY + damager.getName() + " tagged " + victim.getName());
         victim.spigot().sendMessage(
