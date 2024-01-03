@@ -3,6 +3,7 @@ package io.github.seriousguy888.cheezsurvtaggame;
 import io.github.seriousguy888.cheezsurvtaggame.commands.ItCommand;
 import io.github.seriousguy888.cheezsurvtaggame.commands.StatsCommand;
 import io.github.seriousguy888.cheezsurvtaggame.config.RulesetConfig;
+import io.github.seriousguy888.cheezsurvtaggame.database.Database;
 import io.github.seriousguy888.cheezsurvtaggame.runnables.ChooseRandomIt;
 import io.github.seriousguy888.cheezsurvtaggame.runnables.SaveGameData;
 import org.bukkit.command.CommandExecutor;
@@ -15,10 +16,14 @@ import java.util.Objects;
 
 public final class CheezSurvTagGame extends JavaPlugin {
     private Game game;
+    private Database database;
     private RulesetConfig rulesetConfig;
 
     @Override
     public void onEnable() {
+        database = new Database(this, "TagGame");
+        database.init();
+
         rulesetConfig = new RulesetConfig(this, "rules.yml");
 
         game = new Game(this);
@@ -37,26 +42,30 @@ public final class CheezSurvTagGame extends JavaPlugin {
     @Override
     public void onDisable() {
         new SaveGameData(this).run();
-        rulesetConfig.writeRulesetToConfig();
+//        rulesetConfig.writeRulesetToConfig();
     }
 
     private void registerCommand(String commandName, CommandExecutor executor) {
         PluginCommand command = getCommand(commandName);
 
-        if(command == null) {
+        if (command == null) {
             getLogger().severe("Failed to register command /" + commandName);
             return;
         }
 
         command.setExecutor(executor);
 
-        if(executor instanceof TabCompleter) {
+        if (executor instanceof TabCompleter) {
             command.setTabCompleter((TabCompleter) executor);
         }
     }
 
     public Game getGame() {
         return game;
+    }
+
+    public Database getDatabase() {
+        return database;
     }
 
     public RulesetConfig getRulesetConfig() {

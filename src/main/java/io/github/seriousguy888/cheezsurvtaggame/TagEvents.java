@@ -70,17 +70,7 @@ public class TagEvents implements Listener {
             return;
         }
 
-        game.setIt(victim);
-        game.setPreviousIt(damager);
-        game.setLastTagTimestampToNow();
-
-        TagStatsProfile damagerStats = game.getTagStats(damager);
-        damagerStats.incrementTagsGiven();
-        game.setTagStats(damager, damagerStats);
-
-        TagStatsProfile victimStats = game.getTagStats(victim);
-        victimStats.incrementTagsTaken();
-        game.setTagStats(victim, victimStats);
+        game.passItTo(victim, damager);
 
         Bukkit.broadcastMessage(ChatColor.GRAY + damager.getName() + " tagged " + victim.getName());
         victim.spigot().sendMessage(
