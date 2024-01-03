@@ -1,7 +1,9 @@
 package io.github.seriousguy888.cheezsurvtaggame.database;
 
 import io.github.seriousguy888.cheezsurvtaggame.CheezSurvTagGame;
+import org.bukkit.OfflinePlayer;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.sql.*;
 import java.util.logging.Level;
@@ -55,7 +57,7 @@ public class Database {
                             TagLog(
                                 NewItUUID varchar(36) NOT NULL,
                                 OldItUUID varchar(36),
-                                Timestamp timestamp NOT NULL UNIQUE
+                                Timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
                             )
                             """);
             statement.execute();
@@ -63,6 +65,45 @@ public class Database {
         } catch (SQLException e) {
             plugin.getLogger().log(Level.SEVERE, "Failed to initialise database.", e);
         }
+    }
+
+    /**
+     * Write a new row to the TagLog table indicating that this player is now It.
+     * The old It field will be left blank.
+     *
+     * @param newIt The player that has been made it.
+     */
+    public void logNewIt(OfflinePlayer newIt) {
+        logNewIt(newIt, null);
+    }
+
+    /**
+     * Write a new row to the TagLog table indicating the current timestamp and who is now It. If this player
+     * is now it because of a tagging event, the old It can also be specified. Otherwise, the old It field can
+     * be left blank, such as if they were chosen to be It manually or automatically because the previous It
+     * player is offline.
+     *
+     * @param oldIt Previously It player who tagged the new player.
+     * @param newIt The player that is now It.
+     */
+    public void logNewIt(OfflinePlayer newIt, @Nullable OfflinePlayer oldIt) {
+
+        try (Connection connection = getConnection()) {
+            // [!] Multiline strings break this for some reason, constructing a
+            //     syntactically incorrect SQL query.
+            PreparedStatement statement = connection.prepareStatement(
+                    "INSERT INTO TagLog(NewItUUID, OldItUUID) VALUES (?, ?)");
+            statement.setString(1, newIt.getUniqueId().toString());
+            statement.setString(2, oldIt == null ? null : oldIt.getUniqueId().toString());
+
+            plugin.getLogger().info("Executing SQL statement: " + statement);
+
+            statement.execute();
+            statement.close();
+        } catch (SQLException e) {
+            plugin.getLogger().log(Level.WARNING, "Unable to update database with new entry in tag log.", e);
+        }
+
     }
 
 }

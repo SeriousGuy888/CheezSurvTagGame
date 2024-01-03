@@ -8,12 +8,9 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.*;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.logging.Level;
 
 public class Game {
     private final CheezSurvTagGame plugin;
@@ -101,23 +98,7 @@ public class Game {
         newItStats.incrementTagsGiven();
         setTagStats(newIt, newItStats);
 
-        try (Connection connection = plugin.getDatabase().getConnection()) {
-
-            // [!] Multiline strings break this for some reason, constructing a
-            //     syntactically incorrect SQL query.
-            PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO TagLog(NewItUUID, OldItUUID, Timestamp) VALUES (?, ?, ?)");
-            statement.setString(1, newIt.getUniqueId().toString());
-            statement.setString(2, oldIt.getUniqueId().toString());
-            statement.setTimestamp(3, new Timestamp(new Date().getTime()));
-
-            plugin.getLogger().info(statement.toString());
-
-            statement.execute();
-            statement.close();
-        } catch (SQLException e) {
-            plugin.getLogger().log(Level.WARNING, "Unable to update database with new entry in tag log.", e);
-        }
+        plugin.getDatabase().logNewIt(newIt, oldIt);
     }
 
 

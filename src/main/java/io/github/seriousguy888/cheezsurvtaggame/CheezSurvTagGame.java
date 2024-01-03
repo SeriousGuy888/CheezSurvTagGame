@@ -21,7 +21,7 @@ public final class CheezSurvTagGame extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        database = new Database(this, "tag_data");
+        database = new Database(this, "TagGame");
         database.init();
 
         rulesetConfig = new RulesetConfig(this, "rules.yml");
