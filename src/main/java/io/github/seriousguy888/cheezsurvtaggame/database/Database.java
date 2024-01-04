@@ -31,13 +31,10 @@ public class Database {
             // If here, do nothing and continue below to try to create a new connection.
         }
 
-        File folder = plugin.getDataFolder();
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
+        File dbFile = new File(plugin.getDataFolder(), "data" + File.separator + dbName + ".db");
+        dbFile.getParentFile().mkdirs();
 
-        File dbFile = new File(folder, "data" + File.separator + dbName + ".db");
-        String url = "jdbc:sqlite:" + dbFile;
+        String url = "jdbc:sqlite:" + dbFile.getAbsolutePath();
 
         try {
             Class.forName("org.sqlite.JDBC");
