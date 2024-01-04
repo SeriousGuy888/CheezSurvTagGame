@@ -9,3 +9,19 @@ commands:
     description: See who is currently It in the game of tag, or set who is It if you have perms.
   tagstats:
     description: See your stats or the stats of other players in the game of tag.
+  taghud:
+    description: Toggle whether you want to see the Tag HUD.
+permissions:
+  survtag.it.set:
+    description: Whether a player can use /it <player> to manually set another player as being it.
+    default: op
+  survtag.hud:
+    description: |
+      Whether players can use the /taghud command to toggle seeing the HUD
+      (the bossbar that provides info about who is it)
+    default: true
+    children:
+      survtag.hud.others: false
+  survtag.hud.others:
+    description: Allows a player to toggle the Tag HUD for another player.
+    default: op

@@ -61,12 +61,11 @@ public class TagEvents implements Listener {
             return; // crude test to try to prevent tagging npcs
 
 
-        long tagbackCooldownMs = 3000; // how long players must wait before tagging back the player who tagged them
-        long msSinceLastTag = game.getMsSinceLastTag();
-        double cooldownRemaining = (double) (tagbackCooldownMs - msSinceLastTag) / 1000;
-        if (victim == game.getPreviousIt() && msSinceLastTag < tagbackCooldownMs) {
+        long cooldownRemainingMs = plugin.getGame().getTagbackCooldownRemainingMs();
+        double cooldownRemainingSec = (double) cooldownRemainingMs / 1000;
+        if (victim == game.getPreviousIt() && cooldownRemainingMs > 0) {
             damager.sendMessage(ChatColor.GRAY +
-                    "Wait " + cooldownRemaining + " seconds to tag back the player who tagged you.");
+                    "Wait " + cooldownRemainingSec + " seconds to tag back the player who tagged you.");
             return;
         }
 

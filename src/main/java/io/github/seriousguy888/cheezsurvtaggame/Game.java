@@ -17,10 +17,12 @@ public class Game {
     private final File file;
     private final FileConfiguration gameDataStorage;
 
-    private HashMap<OfflinePlayer, TagStatsProfile> playerTagStats;
+    private final HashMap<OfflinePlayer, TagStatsProfile> playerTagStats;
 
     private OfflinePlayer it; // the player who is currently it
     private OfflinePlayer previousIt; // who to apply the tagback cooldown on
+
+    private long tagbackCooldownMs = 3000; // how long players must wait before tagging player who tagged them
     private long lastTagTimestamp; // used for calculating the tagback cooldown
 
 
@@ -90,7 +92,6 @@ public class Game {
 
     public void passItTo(OfflinePlayer newIt, OfflinePlayer oldIt) {
         setIt(newIt);
-        setPreviousIt(oldIt);
         setLastTagTimestampToNow();
 
         TagStatsProfile oldItStats = getTagStats(oldIt);
@@ -149,27 +150,35 @@ public class Game {
     }
 
 
-    public long getMsSinceLastTag() {
-        return System.currentTimeMillis() - lastTagTimestamp;
-    }
-
-    public void setLastTagTimestampToNow() {
-        lastTagTimestamp = System.currentTimeMillis();
-    }
-
     public OfflinePlayer getIt() {
         return it;
     }
 
     public void setIt(OfflinePlayer it) {
+        this.previousIt = this.it;
         this.it = it;
+
+        plugin.getTagHudManager().updateBossbarTitles();
+        plugin.getTagHudManager().updateBossbarPlayers(this.it, this.previousIt);
     }
 
     public OfflinePlayer getPreviousIt() {
         return previousIt;
     }
 
-    public void setPreviousIt(OfflinePlayer previousIt) {
-        this.previousIt = previousIt;
+    public void setLastTagTimestampToNow() {
+        lastTagTimestamp = System.currentTimeMillis();
+    }
+
+    public long getTagbackCooldownMs() {
+        return tagbackCooldownMs;
+    }
+
+    public long getTimeSinceLastTagMs() {
+        return System.currentTimeMillis() - lastTagTimestamp;
+    }
+
+    public long getTagbackCooldownRemainingMs() {
+        return tagbackCooldownMs - getTimeSinceLastTagMs();
     }
 }

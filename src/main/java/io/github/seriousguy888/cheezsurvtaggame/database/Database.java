@@ -6,6 +6,7 @@ import org.bukkit.OfflinePlayer;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.sql.*;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public class Database {
@@ -50,18 +51,27 @@ public class Database {
     }
 
     public void init() {
-        try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection
-                    .prepareStatement("""
-                            CREATE TABLE IF NOT EXISTS
-                            TagLog(
-                                NewItUUID varchar(36) NOT NULL,
-                                OldItUUID varchar(36),
-                                Timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-                            )
-                            """);
-            statement.execute();
-            statement.close();
+        try (Connection connection = getConnection();
+             PreparedStatement createLogTable = connection
+                     .prepareStatement("""
+                             CREATE TABLE IF NOT EXISTS
+                             TagLog(
+                                 NewItUUID varchar(36) NOT NULL,
+                                 OldItUUID varchar(36),
+                                 Timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+                             )
+                             """);
+             PreparedStatement createPreferencesTable = connection
+                     .prepareStatement("""
+                             CREATE TABLE IF NOT EXISTS
+                             Preferences(
+                                 PlayerUUID varchar(36) PRIMARY KEY,
+                                 EnableHUD boolean NOT NULL DEFAULT 0
+                             )
+                             """)
+        ) {
+            createLogTable.execute();
+            createPreferencesTable.execute();
         } catch (SQLException e) {
             plugin.getLogger().log(Level.SEVERE, "Failed to initialise database.", e);
         }
@@ -103,7 +113,40 @@ public class Database {
         } catch (SQLException e) {
             plugin.getLogger().log(Level.WARNING, "Unable to update database with new entry in tag log.", e);
         }
-
     }
 
+    public boolean getHudEnabled(OfflinePlayer player) {
+        UUID uuid = player.getUniqueId();
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement("SELECT * FROM Preferences WHERE PlayerUUID = ?")) {
+            statement.setString(1, uuid.toString());
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getBoolean("EnableHUD");
+            }
+
+            resultSet.close();
+        } catch (SQLException e) {
+            plugin.getLogger().log(Level.WARNING, "Could not get whether HUD is enabled for " + uuid, e);
+        }
+
+        return false;
+    }
+
+    public void setHudEnabled(OfflinePlayer player, boolean enabled) {
+        UUID uuid = player.getUniqueId();
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "REPLACE INTO Preferences (PlayerUUID, EnableHUD) VALUES (?, ?)")) {
+            statement.setString(1, uuid.toString());
+            statement.setBoolean(2, enabled);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            plugin.getLogger().log(Level.WARNING, "Could not set whether HUD is enabled for " + uuid, e);
+        }
+    }
 }
