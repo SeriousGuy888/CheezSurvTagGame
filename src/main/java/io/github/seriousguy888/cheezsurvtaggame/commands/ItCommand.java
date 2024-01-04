@@ -32,7 +32,7 @@ public class ItCommand implements CommandExecutor { //  implements TabExecutor
       return true;
     }
 
-    if(!sender.hasPermission("tag_game.set_it")) {
+    if(!sender.hasPermission("survtag.it.set")) {
       sender.sendMessage(ChatColor.RED +
           "Insufficient permission to set who is it. Run the command without arguments to see who is it.");
       return true;
