@@ -24,11 +24,6 @@ public class HudCommand implements CommandExecutor {
                              @Nonnull String label,
                              @Nonnull String[] args) {
 
-        if (!sender.hasPermission("survtag.hud")) {
-            sender.sendMessage(ChatColor.RED + "Insufficient permissions.");
-            return true;
-        }
-
         Player target = (sender instanceof Player) ? (Player) sender : null;
         boolean isForcingOther = false;
         if (args.length >= 1) {

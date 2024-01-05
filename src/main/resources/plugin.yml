@@ -7,17 +7,28 @@ description: just a plugin to play tag on an smp
 commands:
   it:
     description: See who is currently It in the game of tag, or set who is It if you have perms.
+    permission: survtag.it
   tagstats:
     description: See your stats or the stats of other players in the game of tag.
+    permission: survtag.stats
   taghud:
     description: Toggle whether you want to see the Tag HUD.
+    permission: survtag.hud
   tagrules:
     description: See the rules of the game.
     permission: survtag.rules
 permissions:
+  survtag.it:
+    description: Allows a player to use /it to check who is currently it.
+    default: true
+    children:
+      survtag.it.set: false
   survtag.it.set:
-    description: Whether a player can use /it <player> to manually set another player as being it.
+    description: Allows a player to use /it <player> to manually set another player as being it.
     default: op
+  survtag.stats:
+    description: Allows a player to use /tagstats to see their own stats or those of another player.
+    default: true
   survtag.hud:
     description: |
       Whether players can use the /taghud command to toggle seeing the HUD
