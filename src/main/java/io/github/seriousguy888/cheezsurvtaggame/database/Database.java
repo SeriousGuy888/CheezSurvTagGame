@@ -103,8 +103,6 @@ public class Database {
             statement.setString(1, newIt.getUniqueId().toString());
             statement.setString(2, oldIt == null ? null : oldIt.getUniqueId().toString());
 
-            plugin.getLogger().info("Executing SQL statement: " + statement);
-
             statement.execute();
             statement.close();
         } catch (SQLException e) {
