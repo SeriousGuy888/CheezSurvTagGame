@@ -1,12 +1,8 @@
 package io.github.seriousguy888.cheezsurvtaggame.runnables;
 
 import io.github.seriousguy888.cheezsurvtaggame.CheezSurvTagGame;
-import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.boss.BossBar;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.UUID;
 
 public class UpdateBossbars extends BukkitRunnable {
 
@@ -23,7 +19,7 @@ public class UpdateBossbars extends BukkitRunnable {
     @Override
     public void run() {
         double progress = Math.max(0, Math.min(1,
-                (double) plugin.getGame().getTimeSinceLastTagMs() / plugin.getGame().getTagbackCooldownMs()));
+                (double) plugin.getGame().getTimeSinceLastTagMs() / plugin.getRules().getTagbackCooldownMs()));
         itBar.setProgress(progress);
         notItBar.setProgress(progress);
 

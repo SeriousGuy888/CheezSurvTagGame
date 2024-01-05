@@ -2,23 +2,21 @@ package io.github.seriousguy888.cheezsurvtaggame;
 
 import io.github.seriousguy888.cheezsurvtaggame.commands.HudCommand;
 import io.github.seriousguy888.cheezsurvtaggame.commands.ItCommand;
+import io.github.seriousguy888.cheezsurvtaggame.commands.RulesCommand;
 import io.github.seriousguy888.cheezsurvtaggame.commands.StatsCommand;
-import io.github.seriousguy888.cheezsurvtaggame.config.RulesetConfig;
+import io.github.seriousguy888.cheezsurvtaggame.config.RulesConfig;
 import io.github.seriousguy888.cheezsurvtaggame.database.Database;
 import io.github.seriousguy888.cheezsurvtaggame.runnables.ChooseRandomIt;
 import io.github.seriousguy888.cheezsurvtaggame.runnables.SaveGameData;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.Set;
 
 public final class CheezSurvTagGame extends JavaPlugin {
     private Game game;
     private Database database;
-    private RulesetConfig rulesetConfig;
+    private RulesConfig rules;
     private TagHudManager tagHudManager;
 
     @Override
@@ -26,7 +24,7 @@ public final class CheezSurvTagGame extends JavaPlugin {
         database = new Database(this, "TagGame");
         database.init();
 
-        rulesetConfig = new RulesetConfig(this, "rules.yml");
+        rules = new RulesConfig(this, "rules");
         tagHudManager = new TagHudManager(this);
 
         game = new Game(this);
@@ -40,6 +38,7 @@ public final class CheezSurvTagGame extends JavaPlugin {
         registerCommand("taghud", new HudCommand(this));
         registerCommand("it", new ItCommand(this));
         registerCommand("tagstats", new StatsCommand(this));
+        registerCommand("tagrules", new RulesCommand(this));
 
         new SaveGameData(this).runTaskTimer(this, 0, 15 * 60 * 20);
         new ChooseRandomIt(this).runTaskTimer(this, 0, 5 * 60 * 20);
@@ -48,7 +47,6 @@ public final class CheezSurvTagGame extends JavaPlugin {
     @Override
     public void onDisable() {
         new SaveGameData(this).run();
-//        rulesetConfig.writeRulesetToConfig();
 
         tagHudManager.stopDisplayingBossbars();
     }
@@ -76,8 +74,8 @@ public final class CheezSurvTagGame extends JavaPlugin {
         return database;
     }
 
-    public RulesetConfig getRulesetConfig() {
-        return rulesetConfig;
+    public RulesConfig getRules() {
+        return rules;
     }
 
     public TagHudManager getTagHudManager() {

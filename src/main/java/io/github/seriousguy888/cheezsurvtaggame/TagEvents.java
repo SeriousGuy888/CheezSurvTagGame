@@ -1,7 +1,6 @@
 package io.github.seriousguy888.cheezsurvtaggame;
 
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import io.github.seriousguy888.cheezsurvtaggame.config.RulesConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -11,6 +10,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.projectiles.ProjectileSource;
@@ -33,7 +33,7 @@ public class TagEvents implements Listener {
         if (damagingEntity instanceof Player) {
             // If the direct damaging entity was a player, designate that player as the damager.
             damager = (Player) damagingEntity;
-        } else if (damagingEntity instanceof Projectile) {
+        } else if (plugin.getRules().getProjectilesCanTag() && damagingEntity instanceof Projectile) {
             // If the direct damaging entity was a projectile, test if there was a player that shot
             // said projectile. If so, that player is the damager, and we will continue as if ranged
             // attack was any other attack.
@@ -48,7 +48,6 @@ public class TagEvents implements Listener {
             return;
         }
 
-
         Game game = plugin.getGame();
         OfflinePlayer it = game.getIt();
         if (it == null)
@@ -59,6 +58,17 @@ public class TagEvents implements Listener {
             return;
         if (!Bukkit.getOnlinePlayers().contains(victim))
             return; // crude test to try to prevent tagging npcs
+
+
+        if (plugin.getRules().getShieldsCanBlock()) {
+            // hacky way to detect if a shield blocked all the damage
+            // since EntityDamageEvent.DamageModifier is deprecated
+            plugin.getServer().broadcastMessage(
+                    event.getFinalDamage() + "; " + event.getDamage());
+            if (victim.isBlocking() && event.getFinalDamage() == 0) {
+                return;
+            }
+        }
 
 
         long cooldownRemainingMs = plugin.getGame().getTagbackCooldownRemainingMs();

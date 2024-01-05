@@ -22,8 +22,7 @@ public class Game {
     private OfflinePlayer it; // the player who is currently it
     private OfflinePlayer previousIt; // who to apply the tagback cooldown on
 
-    private long tagbackCooldownMs = 3000; // how long players must wait before tagging player who tagged them
-    private long lastTagTimestamp; // used for calculating the tagback cooldown
+    private long lastTagTimestamp = 0; // used for calculating the tagback cooldown
 
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -41,7 +40,6 @@ public class Game {
             }
         }
         gameDataStorage = YamlConfiguration.loadConfiguration(file);
-
         loadState();
     }
 
@@ -179,6 +177,6 @@ public class Game {
     }
 
     public long getTagbackCooldownRemainingMs() {
-        return tagbackCooldownMs - getTimeSinceLastTagMs();
+        return plugin.getRules().getTagbackCooldownMs() - getTimeSinceLastTagMs();
     }
 }

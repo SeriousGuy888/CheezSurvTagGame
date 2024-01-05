@@ -11,6 +11,9 @@ commands:
     description: See your stats or the stats of other players in the game of tag.
   taghud:
     description: Toggle whether you want to see the Tag HUD.
+  tagrules:
+    description: See the rules of the game.
+    permission: survtag.rules
 permissions:
   survtag.it.set:
     description: Whether a player can use /it <player> to manually set another player as being it.
@@ -24,4 +27,12 @@ permissions:
       survtag.hud.others: false
   survtag.hud.others:
     description: Allows a player to toggle the Tag HUD for another player.
+    default: op
+  survtag.rules:
+    description: Allows a player to see what the current rules are.
+    default: true
+    children:
+      survtag.rules.modify: false
+  survtag.rules.modify:
+    description: Allows a player to use the /tagrules command to modify the rules of the game.
     default: op
