@@ -92,7 +92,7 @@ public class Game {
 
     public void passItTo(OfflinePlayer newIt, OfflinePlayer oldIt) {
         setIt(newIt);
-        setLastTagTimestampToNow();
+        restartTagbackCooldown();
 
         TagStatsProfile oldItStats = getTagStats(oldIt);
         oldItStats.incrementTagsGiven();
@@ -166,12 +166,12 @@ public class Game {
         return previousIt;
     }
 
-    public void setLastTagTimestampToNow() {
-        lastTagTimestamp = System.currentTimeMillis();
+    public void clearTagbackCooldown() {
+        lastTagTimestamp = 0;
     }
 
-    public long getTagbackCooldownMs() {
-        return tagbackCooldownMs;
+    public void restartTagbackCooldown() {
+        lastTagTimestamp = System.currentTimeMillis();
     }
 
     public long getTimeSinceLastTagMs() {
