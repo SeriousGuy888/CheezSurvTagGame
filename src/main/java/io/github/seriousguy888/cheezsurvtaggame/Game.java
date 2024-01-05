@@ -97,7 +97,7 @@ public class Game {
         setTagStats(oldIt, oldItStats);
 
         TagStatsProfile newItStats = getTagStats(newIt);
-        newItStats.incrementTagsGiven();
+        newItStats.incrementTagsTaken();
         setTagStats(newIt, newItStats);
 
         plugin.getDatabase().logNewIt(newIt, oldIt);
