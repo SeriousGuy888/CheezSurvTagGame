@@ -63,8 +63,6 @@ public class TagEvents implements Listener {
         if (plugin.getRules().getShieldsCanBlock()) {
             // hacky way to detect if a shield blocked all the damage
             // since EntityDamageEvent.DamageModifier is deprecated
-            plugin.getServer().broadcastMessage(
-                    event.getFinalDamage() + "; " + event.getDamage());
             if (victim.isBlocking() && event.getFinalDamage() == 0) {
                 return;
             }
