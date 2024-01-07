@@ -6,6 +6,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.logging.Level;
 
 public abstract class CustomConfigReader {
@@ -13,22 +15,28 @@ public abstract class CustomConfigReader {
     private final File file;
     protected FileConfiguration config;
 
-    public CustomConfigReader(CheezSurvTagGame plugin, String name) {
+    private final boolean mustRetainComments;
+
+    public CustomConfigReader(CheezSurvTagGame plugin, String name, boolean mustRetainComments) {
         this.plugin = plugin;
         this.file = new File(plugin.getDataFolder(), name + ".yml");
+        this.mustRetainComments = mustRetainComments;
 
         loadFromDisk();
     }
 
+    public CustomConfigReader(CheezSurvTagGame plugin, String name) {
+        this(plugin, name, false);
+    }
+
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void loadFromDisk() {
+        InputStream defaultConfigStream = plugin.getResource(file.getName());
+
         if (!file.exists()) {
             file.getParentFile().mkdirs();
 
-            // Whether the resource exists in the plugin jar file
-            boolean resourceExists = plugin.getResource(file.getName()) != null;
-
-            if (resourceExists) {
+            if (defaultConfigStream != null) {
                 // Copy the file from the jar file into the plugin's folder on the server if it doesn't exist
                 plugin.saveResource(file.getName(), false);
             } else {
@@ -39,6 +47,36 @@ public abstract class CustomConfigReader {
         }
 
         config = YamlConfiguration.loadConfiguration(file);
+
+        if (defaultConfigStream != null) {
+            // Write any keys present in the default config (the one included in the jar file)
+            // but absent in the one currently on disk in the plugin folder.
+
+            // Grab the default config included inside the jar file
+            var defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultConfigStream));
+
+            // Copy default key values and comments to the keys that aren't set
+            defaultConfig
+                    .getKeys(true)
+                    .stream()
+                    .filter(key -> !config.contains(key))
+                    .forEach(key -> config.set(key, defaultConfig.get(key)));
+
+            if (mustRetainComments) {
+                // Keep the comments at the top up to date
+                config.options().setHeader(defaultConfig.options().getHeader());
+
+                // Copy all the other comments as well from the default config
+                config
+                        .getKeys(true)
+                        .forEach(key -> {
+                            config.setComments(key, defaultConfig.getComments(key));
+                            config.setInlineComments(key, defaultConfig.getInlineComments(key));
+                        });
+            }
+
+            saveToDisk();
+        }
     }
 
     /**
