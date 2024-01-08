@@ -79,7 +79,6 @@ public class TagEvents implements Listener {
 
         game.passItTo(victim, damager);
 
-        Bukkit.broadcastMessage(ChatColor.GRAY + damager.getName() + " tagged " + victim.getName());
     }
 
     @EventHandler

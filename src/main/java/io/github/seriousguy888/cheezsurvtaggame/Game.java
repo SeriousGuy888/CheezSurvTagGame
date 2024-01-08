@@ -1,6 +1,7 @@
 package io.github.seriousguy888.cheezsurvtaggame;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -18,6 +19,8 @@ public class Game {
     private final FileConfiguration gameDataStorage;
 
     private final HashMap<OfflinePlayer, TagStatsProfile> playerTagStats;
+
+    private final GameAnnouncer announcer;
 
     private OfflinePlayer it; // the player who is currently it
     private OfflinePlayer previousIt; // who to apply the tagback cooldown on
@@ -40,6 +43,9 @@ public class Game {
             }
         }
         gameDataStorage = YamlConfiguration.loadConfiguration(file);
+
+        announcer = new GameAnnouncer(plugin);
+
         loadState();
     }
 
@@ -100,8 +106,11 @@ public class Game {
         newItStats.incrementTagsTaken();
         setTagStats(newIt, newItStats);
 
+        announcer.announceTag(newIt.getName(), oldIt.getName());
+
         plugin.getDatabase().logNewIt(newIt, oldIt);
     }
+
 
 
     public void loadTagStats() { // if no argument is supplied, load the stats for all players currently online
@@ -178,5 +187,9 @@ public class Game {
 
     public long getTagbackCooldownRemainingMs() {
         return plugin.getRules().getTagbackCooldownMs() - getTimeSinceLastTagMs();
+    }
+
+    public GameAnnouncer getAnnouncer() {
+        return announcer;
     }
 }

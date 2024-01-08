@@ -4,6 +4,9 @@ main: io.github.seriousguy888.cheezsurvtaggame.CheezSurvTagGame
 api-version: 1.20
 authors: [ SeriousGuy888 ]
 description: just a plugin to play tag on an smp
+
+softdepend: [ DiscordSRV ]
+
 commands:
   it:
     description: See who is currently It in the game of tag, or set who is It if you have perms.

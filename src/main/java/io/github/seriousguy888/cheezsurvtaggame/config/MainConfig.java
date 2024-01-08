@@ -10,4 +10,12 @@ public class MainConfig extends CustomConfigReader {
     public boolean getLogTagEventsToDb() {
         return config.getBoolean("log-tag-events-to-db", false);
     }
+
+    public boolean getDiscordSrvIntegrationEnabled() {
+        return config.getBoolean("discordsrv.enabled", false);
+    }
+
+    public String getDiscordSrvChannelName() {
+        return config.getString("discordsrv.channel-name", "global");
+    }
 }

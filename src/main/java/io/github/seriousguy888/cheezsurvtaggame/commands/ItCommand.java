@@ -50,10 +50,8 @@ public class ItCommand implements CommandExecutor { //  implements TabExecutor
 
         plugin.getGame().clearTagbackCooldown();
         plugin.getGame().setIt(player);
+        plugin.getGame().getAnnouncer().announceManuallyChosenIt(player.getName(), sender.getName());
         plugin.getDatabase().logNewIt(player);
-
-        Bukkit.broadcastMessage(ChatColor.GRAY +
-                player.getName() + " is now It. (Manually set by " + sender.getName() + ")");
         return true;
     }
 

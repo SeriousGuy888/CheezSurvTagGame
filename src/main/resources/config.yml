@@ -1,3 +1,12 @@
+# CheezSurvTagGame Configuration
+
+# DiscordSRV integration.
+# If enabled, the plugin will send messages through DiscordSRV to the specified channel
+# whenever someone is tagged by someone else or somehow set as It, whether by an admin or automatically.
+discordsrv:
+  enabled: false # Enable sending Discord messages? (DiscordSRV must be installed.)
+  channel-name: global # Channel name specified in the DiscordSRV config.yml file. Leave as "global" if you don't know.
+
 # Under the plugin folder, data is stored under /data/TagGame.db in a SQLite database.
 # This option controls whether the plugin will add new rows to the TagLog table in this
 # database whenever a player is tagged.

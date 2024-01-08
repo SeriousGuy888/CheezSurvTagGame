@@ -4,8 +4,10 @@ import io.github.seriousguy888.cheezsurvtaggame.commands.HudCommand;
 import io.github.seriousguy888.cheezsurvtaggame.commands.ItCommand;
 import io.github.seriousguy888.cheezsurvtaggame.commands.RulesCommand;
 import io.github.seriousguy888.cheezsurvtaggame.commands.StatsCommand;
+import io.github.seriousguy888.cheezsurvtaggame.config.MainConfig;
 import io.github.seriousguy888.cheezsurvtaggame.config.RulesConfig;
 import io.github.seriousguy888.cheezsurvtaggame.database.Database;
+import io.github.seriousguy888.cheezsurvtaggame.discordsrv.DiscordMessageSender;
 import io.github.seriousguy888.cheezsurvtaggame.runnables.ChooseRandomIt;
 import io.github.seriousguy888.cheezsurvtaggame.runnables.SaveGameData;
 import org.bukkit.command.CommandExecutor;
@@ -13,19 +15,33 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.annotation.Nullable;
+
 public final class CheezSurvTagGame extends JavaPlugin {
     private Game game;
-    private Database database;
+
+    private MainConfig mainConfig;
     private RulesConfig rules;
+
+    private Database database;
     private TagHudManager tagHudManager;
+
+    private DiscordMessageSender discordMessageSender;
 
     @Override
     public void onEnable() {
+        mainConfig = new MainConfig(this, "config");
+        rules = new RulesConfig(this, "rules");
+
         database = new Database(this, "TagGame");
         database.init();
 
-        rules = new RulesConfig(this, "rules");
         tagHudManager = new TagHudManager(this);
+
+        if (isDiscordSrvAvailable() && mainConfig.getDiscordSrvIntegrationEnabled()) {
+            getLogger().info("Successfully enabled DiscordSRV integration.");
+            discordMessageSender = new DiscordMessageSender(this);
+        }
 
         game = new Game(this);
         game.loadTagStats();
@@ -66,19 +82,32 @@ public final class CheezSurvTagGame extends JavaPlugin {
         }
     }
 
+    public boolean isDiscordSrvAvailable() {
+        return getServer().getPluginManager().isPluginEnabled("DiscordSRV");
+    }
+
     public Game getGame() {
         return game;
     }
 
-    public Database getDatabase() {
-        return database;
+    public MainConfig getMainConfig() {
+        return mainConfig;
     }
 
     public RulesConfig getRules() {
         return rules;
     }
 
+    public Database getDatabase() {
+        return database;
+    }
+
     public TagHudManager getTagHudManager() {
         return tagHudManager;
+    }
+
+    @Nullable
+    public DiscordMessageSender getDiscordMessageSender() {
+        return discordMessageSender;
     }
 }
