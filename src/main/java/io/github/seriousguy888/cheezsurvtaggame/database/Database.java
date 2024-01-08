@@ -94,6 +94,10 @@ public class Database {
      * @param newIt The player that is now It.
      */
     public void logNewIt(OfflinePlayer newIt, @Nullable OfflinePlayer oldIt) {
+        if(!plugin.getMainConfig().getLogTagEventsToDb()) {
+            // Don't log anything if configured not to.
+            return;
+        }
 
         try (Connection connection = getConnection()) {
             // [!] Multiline strings break this for some reason, constructing a

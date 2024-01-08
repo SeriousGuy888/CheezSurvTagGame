@@ -1,0 +1,13 @@
+package io.github.seriousguy888.cheezsurvtaggame.config;
+
+import io.github.seriousguy888.cheezsurvtaggame.CheezSurvTagGame;
+
+public class MainConfig extends CustomConfigReader {
+    public MainConfig(CheezSurvTagGame plugin, String name) {
+        super(plugin, name, true);
+    }
+
+    public boolean getLogTagEventsToDb() {
+        return config.getBoolean("log-tag-events-to-db", false);
+    }
+}
