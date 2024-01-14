@@ -80,6 +80,13 @@ public class TagHudManager implements Listener {
             return;
         }
 
+        if(Bukkit.getOnlinePlayers().size() == 1) {
+            String bossbarTitle = "Nobody else online. \"/taghud\" to toggle It Indicator.";
+            itBar.setTitle(ChatColor.RED + bossbarTitle);
+            notItBar.setTitle(ChatColor.AQUA + bossbarTitle);
+            return;
+        }
+
         long cooldown = game.getTagbackCooldownRemainingMs();
         boolean cooldownActive = cooldown > 0;
 
