@@ -4,31 +4,49 @@ import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
 import io.github.seriousguy888.cheezsurvtaggame.CheezSurvTagGame;
 
+import javax.annotation.Nullable;
+
 public class DiscordMessageSender {
     private final CheezSurvTagGame plugin;
 
-    private final TextChannel textChannel;
+    @Nullable
+    private TextChannel textChannel;
 
     public DiscordMessageSender(CheezSurvTagGame plugin) {
         this.plugin = plugin;
+        getTextChannel();
+    }
 
-        String channelName = plugin.getMainConfig().getDiscordSrvChannelName();
-        textChannel = DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(channelName);
+    @Nullable
+    private TextChannel getTextChannel() {
+        if (textChannel != null) {
+            return textChannel;
+        }
+
+        textChannel = DiscordSRV
+                .getPlugin()
+                .getDestinationTextChannelForGameChannelName(
+                        plugin
+                                .getMainConfig()
+                                .getDiscordSrvChannelName()
+                );
 
         if (textChannel == null) {
-            plugin.getLogger().warning(
-                    "Configured DiscordSRV channel name in `config.yml` is not a valid channel.");
+            plugin.getLogger().warning("Failed to get text channel from DiscordSRV.");
         }
+
+        return textChannel;
     }
 
     public void sendMessage(String message) {
-        if (!textChannel.canTalk()) {
-            plugin.getLogger().warning(
-                    "Could not send message to text channel in Discord (DiscordSRV integration) because " +
-                            "the bot does not have permission.");
+        TextChannel channel = getTextChannel();
+
+        if (channel == null || !channel.canTalk()) {
+            plugin.getLogger().warning("Failed to send message to Discord because it was not loaded " +
+                    "or the bot does not have permission.");
             return;
         }
 
-        textChannel.sendMessage(message).queue();
+        channel.sendMessage(message).queue();
     }
 }
