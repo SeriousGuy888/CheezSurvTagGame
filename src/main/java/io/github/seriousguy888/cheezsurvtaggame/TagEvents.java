@@ -48,6 +48,11 @@ public class TagEvents implements Listener {
             return;
         }
 
+        // Prevent players from taggin themselves
+        if (damager.equals(victim)) {
+            return;
+        }
+
         Game game = plugin.getGame();
         OfflinePlayer it = game.getIt();
         if (it == null)
