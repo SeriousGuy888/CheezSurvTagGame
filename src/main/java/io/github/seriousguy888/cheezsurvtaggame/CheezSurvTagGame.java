@@ -1,9 +1,6 @@
 package io.github.seriousguy888.cheezsurvtaggame;
 
-import io.github.seriousguy888.cheezsurvtaggame.commands.HudCommand;
-import io.github.seriousguy888.cheezsurvtaggame.commands.ItCommand;
-import io.github.seriousguy888.cheezsurvtaggame.commands.RulesCommand;
-import io.github.seriousguy888.cheezsurvtaggame.commands.StatsCommand;
+import io.github.seriousguy888.cheezsurvtaggame.commands.*;
 import io.github.seriousguy888.cheezsurvtaggame.config.MainConfig;
 import io.github.seriousguy888.cheezsurvtaggame.config.RulesConfig;
 import io.github.seriousguy888.cheezsurvtaggame.database.Database;
@@ -33,15 +30,12 @@ public final class CheezSurvTagGame extends JavaPlugin {
         mainConfig = new MainConfig(this, "config");
         rules = new RulesConfig(this, "rules");
 
+        reloadConfigs();
+
         database = new Database(this, "TagGame");
         database.init();
 
         tagHudManager = new TagHudManager(this);
-
-        if (isDiscordSrvAvailable() && mainConfig.getDiscordSrvIntegrationEnabled()) {
-            getLogger().info("Successfully enabled DiscordSRV integration.");
-            discordMessageSender = new DiscordMessageSender(this);
-        }
 
         game = new Game(this);
         game.loadTagStats();
@@ -51,6 +45,7 @@ public final class CheezSurvTagGame extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new TagEvents(this), this);
         getServer().getPluginManager().registerEvents(tagHudManager, this);
 
+        registerCommand("survtag", new SurvTagCommand(this));
         registerCommand("taghud", new HudCommand(this));
         registerCommand("it", new ItCommand(this));
         registerCommand("tagstats", new StatsCommand(this));
@@ -65,6 +60,16 @@ public final class CheezSurvTagGame extends JavaPlugin {
         new SaveGameData(this).run();
 
         tagHudManager.stopDisplayingBossbars();
+    }
+
+    public void reloadConfigs() {
+        mainConfig.loadFromDisk();
+        rules.loadFromDisk();
+
+        if (mainConfig.getDiscordSrvIntegrationEnabled() && isDiscordSrvAvailable()) {
+            getLogger().info("Successfully enabled DiscordSRV integration.");
+            discordMessageSender = new DiscordMessageSender(this);
+        }
     }
 
     private void registerCommand(String commandName, CommandExecutor executor) {

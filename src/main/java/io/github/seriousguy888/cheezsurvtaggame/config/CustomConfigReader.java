@@ -17,20 +17,35 @@ public abstract class CustomConfigReader {
 
     private final boolean mustRetainComments;
 
+    /**
+     * Create a new CustomConfigReader.
+     * <p>
+     * Remember to call `loadFromDisk()` to actually load the config data!
+     *
+     * @param plugin             The main plugin instance
+     * @param name               The name of the file this reader will read from
+     * @param mustRetainComments Whether comments in this file should be preserved
+     */
     public CustomConfigReader(CheezSurvTagGame plugin, String name, boolean mustRetainComments) {
         this.plugin = plugin;
         this.file = new File(plugin.getDataFolder(), name + ".yml");
         this.mustRetainComments = mustRetainComments;
-
-        loadFromDisk();
     }
 
+    /**
+     * Create a new CustomConfigReader that does not retain comments.
+     * <p>
+     * Remember to call `loadFromDisk()` to actually load the config data!
+     *
+     * @param plugin The main plugin instance
+     * @param name   The name of the file this reader will read from
+     */
     public CustomConfigReader(CheezSurvTagGame plugin, String name) {
         this(plugin, name, false);
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    private void loadFromDisk() {
+    public void loadFromDisk() {
         InputStream defaultConfigStream = plugin.getResource(file.getName());
 
         if (!file.exists()) {

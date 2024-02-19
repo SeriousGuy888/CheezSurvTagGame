@@ -8,6 +8,9 @@ description: just a plugin to play tag on an smp
 softdepend: [ DiscordSRV ]
 
 commands:
+  survtag:
+    description: Admin command for managing SurvTag.
+    permission: survtag.admin
   it:
     description: See who is currently It in the game of tag, or set who is It if you have perms.
     permission: survtag.it
@@ -20,7 +23,11 @@ commands:
   tagrules:
     description: See the rules of the game.
     permission: survtag.rules
+
 permissions:
+  survtag.admin:
+    description: Allows access to the /survtag reload command.
+    default: op
   survtag.it:
     description: Allows a player to use /it to check who is currently it.
     default: true
