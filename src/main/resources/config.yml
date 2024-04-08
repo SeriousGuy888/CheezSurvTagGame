@@ -10,6 +10,8 @@ discordsrv:
 # When the player who is currently It is not online, the plugin will try to choose a random online player to be It.
 it-reassignment:
   interval-seconds: 300 # How many seconds between attempts? Set to 0 to disable.
+  min-online-players: 2 # How many players have to be online to choose a new It?.
+
 # Under the plugin folder, data is stored under /data/TagGame.db in a SQLite database.
 # This option controls whether the plugin will add new rows to the TagLog table in this
 # database whenever a player is tagged.

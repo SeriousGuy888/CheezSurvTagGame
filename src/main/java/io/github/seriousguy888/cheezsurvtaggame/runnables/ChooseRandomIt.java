@@ -20,6 +20,10 @@ public class ChooseRandomIt extends BukkitRunnable {
         if (currentIt != null && currentIt.isOnline())
             return;
 
+        int minPlayers = plugin.getMainConfig().getMinPlayersOnlineToReassign();
+        if (Bukkit.getOnlinePlayers().size() < minPlayers)
+            return;
+
         Player newIt = plugin.getGame().pickRandomIt();
         if (newIt != null) {
             plugin.getGame().getAnnouncer().announceRandomlyChosenIt(newIt.getName());

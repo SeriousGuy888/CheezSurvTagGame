@@ -22,4 +22,8 @@ public class MainConfig extends CustomConfigReader {
     public int getItReassignmentInterval() {
         return config.getInt("it-reassignment.interval", 0);
     }
+
+    public int getMinPlayersOnlineToReassign() {
+        return Math.max(config.getInt("it-reassignment.min-online-players", 1), 1);
+    }
 }
