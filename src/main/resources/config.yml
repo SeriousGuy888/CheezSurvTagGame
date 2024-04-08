@@ -7,6 +7,9 @@ discordsrv:
   enabled: false # Enable sending Discord messages? (DiscordSRV must be installed.)
   channel-name: global # Channel name specified in the DiscordSRV config.yml file. Leave as "global" if you don't know.
 
+# When the player who is currently It is not online, the plugin will try to choose a random online player to be It.
+it-reassignment:
+  interval-seconds: 300 # How many seconds between attempts? Set to 0 to disable.
 # Under the plugin folder, data is stored under /data/TagGame.db in a SQLite database.
 # This option controls whether the plugin will add new rows to the TagLog table in this
 # database whenever a player is tagged.

@@ -18,4 +18,8 @@ public class MainConfig extends CustomConfigReader {
     public String getDiscordSrvChannelName() {
         return config.getString("discordsrv.channel-name", "global");
     }
+
+    public int getItReassignmentInterval() {
+        return config.getInt("it-reassignment.interval", 0);
+    }
 }

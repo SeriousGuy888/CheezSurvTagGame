@@ -52,7 +52,11 @@ public final class CheezSurvTagGame extends JavaPlugin {
         registerCommand("tagrules", new RulesCommand(this));
 
         new SaveGameData(this).runTaskTimer(this, 0, 15 * 60 * 20);
-        new ChooseRandomIt(this).runTaskTimer(this, 0, 5 * 60 * 20);
+
+        int reassignmentInterval = getMainConfig().getItReassignmentInterval();
+        if (reassignmentInterval > 0) {
+            new ChooseRandomIt(this).runTaskTimer(this, 0, reassignmentInterval * 20L);
+        }
     }
 
     @Override
