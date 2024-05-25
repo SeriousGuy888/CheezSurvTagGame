@@ -20,7 +20,7 @@ public class MainConfig extends CustomConfigReader {
     }
 
     public int getItReassignmentInterval() {
-        return config.getInt("it-reassignment.interval", 0);
+        return config.getInt("it-reassignment.interval-seconds", 0);
     }
 
     public int getMinPlayersOnlineToReassign() {
