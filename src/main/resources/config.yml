@@ -19,4 +19,4 @@ it-reassignment:
 # The plugin does not currently use this data in any way, and it's not need for it to function.
 # This feature exists for if you want to export the logs as a spreadsheet later on and calculate
 # for how long each player was it or something like that.
-log-tag-events-to-db: false
+log-tag-events-to-db: true
