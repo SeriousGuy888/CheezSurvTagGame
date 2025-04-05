@@ -6,7 +6,7 @@
 
     <groupId>io.github.seriousguy888</groupId>
     <artifactId>CheezSurvTagGame</artifactId>
-    <version>1.3.0-SNAPSHOT</version>
+    <version>1.3.0</version>
     <packaging>jar</packaging>
 
     <name>CheezSurvTagGame</name>
