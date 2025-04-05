@@ -40,7 +40,7 @@ public class RulesCommand implements TabExecutor {
                     ChatColor.DARK_AQUA + "Shields Can Block Tag: " + ChatColor.AQUA +
                             (plugin.getRules().getShieldsCanBlock() ? "Yes" : "No"),
                     ChatColor.DARK_AQUA + "Tagback Cooldown: " + ChatColor.AQUA +
-                            (plugin.getRules().getTagbackCooldownMs() / 1000.0) + "s",
+                            (plugin.getRules().getTagbackCooldownMs() / 1000.0) + " seconds",
                     ""
             );
 
